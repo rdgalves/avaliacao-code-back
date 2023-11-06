@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class PessoaService {
-
     @Autowired
     private PessoaRepository pessoaRepository;
 

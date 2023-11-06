@@ -1,11 +1,14 @@
 package com.code.avaliacao.service;
 
-import com.code.avaliacao.enums.StatusProjetoEnum;
+import com.code.avaliacao.dto.ProjetoDTO;
 import com.code.avaliacao.exception.DeletarProjetoException;
+import com.code.avaliacao.exception.ValidaProjetoException;
+import com.code.avaliacao.mapper.ProjetoMapper;
 import com.code.avaliacao.model.Projeto;
 import com.code.avaliacao.repository.ProjetoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,13 +17,17 @@ import java.util.Optional;
 public class ProjetoService {
 
     private final ProjetoRepository projetoRepository;
+    private final ProjetoMapper projetoMapper;
 
     @Autowired
-    public ProjetoService(ProjetoRepository projetoRepository) {
+    public ProjetoService(ProjetoRepository projetoRepository, ProjetoMapper projetoMapper) {
         this.projetoRepository = projetoRepository;
+        this.projetoMapper = projetoMapper;
     }
 
-    public Projeto criarProjeto(Projeto projeto) {
+    public Projeto criarProjeto(ProjetoDTO projetoDTO) {
+        this.validarProjeto(projetoDTO);
+        Projeto projeto = projetoMapper.toEntity(projetoDTO);
         return projetoRepository.save(projeto);
     }
 
@@ -65,5 +72,24 @@ public class ProjetoService {
         }
     }
 
+    private void validarProjeto(ProjetoDTO projeto) {
+        if (!StringUtils.hasText(projeto.getNome())) {
+            throw new ValidaProjetoException("projeto.nome.obrigatorio.error");
+        }
+        if (projeto.getIdGerente() == null) {
+            throw new ValidaProjetoException("projeto.gerente.obrigatorio.error");
+        }
 
+        if (projeto.getDataInicio() == null) {
+            throw new ValidaProjetoException("projeto.data_inicio.obrigatorio.error");
+        }
+
+        if (projeto.getDataPrevisaoFim() != null && projeto.getDataInicio().after(projeto.getDataPrevisaoFim())) {
+            throw new ValidaProjetoException("projeto.data_previsao_termino.error");
+        }
+
+        if (projeto.getDataFim() != null && projeto.getDataInicio().after(projeto.getDataFim())) {
+            throw new ValidaProjetoException("projeto.data_termino.error");
+        }
+    }
 }

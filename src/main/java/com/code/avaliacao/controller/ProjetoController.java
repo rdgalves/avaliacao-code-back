@@ -1,5 +1,6 @@
 package com.code.avaliacao.controller;
 
+import com.code.avaliacao.dto.ProjetoDTO;
 import com.code.avaliacao.enums.RiscoProjetoEnum;
 import com.code.avaliacao.enums.StatusProjetoEnum;
 import com.code.avaliacao.model.Projeto;
@@ -26,7 +27,7 @@ public class ProjetoController {
     }
 
     @PostMapping
-    public ResponseEntity<Projeto> criarProjeto(@RequestBody Projeto projeto) {
+    public ResponseEntity<Projeto> criarProjeto(@RequestBody ProjetoDTO projeto) {
         Projeto novoProjeto = projetoService.criarProjeto(projeto);
         return ResponseEntity.ok(novoProjeto);
     }
