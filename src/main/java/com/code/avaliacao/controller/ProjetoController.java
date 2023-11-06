@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/projetos")
@@ -51,8 +55,15 @@ public class ProjetoController {
     }
 
     @GetMapping("/status")
-    public StatusProjetoEnum[] listarStatusProjeto() {
-        return StatusProjetoEnum.values();
+    public List<Map<String, String>> listStatuses() {
+        return Arrays.stream(StatusProjetoEnum.values())
+                .map(enumValue -> {
+                    Map<String, String> enumMap = new HashMap<>();
+                    enumMap.put("id", enumValue.name());
+                    enumMap.put("descricao", enumValue.getDescricao());
+                    return enumMap;
+                })
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/riscos")
