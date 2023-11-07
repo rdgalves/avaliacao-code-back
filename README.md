@@ -72,7 +72,7 @@ Antes de iniciar, certifique-se de que você possui instalado no seu sistema:
 
 - Docker
 - Docker Compose
-- Maven ou Gradle (dependendo da configuração do seu projeto Spring Boot)
+- Maven
 
 ## Início Rápido
 
