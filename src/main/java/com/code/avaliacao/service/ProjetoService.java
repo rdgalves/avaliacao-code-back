@@ -50,6 +50,7 @@ public class ProjetoService {
     }
 
     public Projeto atualizarProjeto(Long id, ProjetoDTO projetoDTO) {
+        this.validarProjeto(projetoDTO);
         return projetoRepository.findById(id)
                 .map(projeto -> {
                     projeto.setNome(projetoDTO.getNome());
