@@ -13,9 +13,15 @@ public class PessoaService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
+    public List<PessoaDTO> listarFuncionarios() {
+        return pessoaRepository.findByFuncionarioTrue().stream()
+                .map(p -> new PessoaDTO(p.getId(), p.getNome(), p.getFuncionario()))
+                .collect(Collectors.toList());
+    }
+
     public List<PessoaDTO> listarPessoas() {
         return pessoaRepository.findAll().stream()
-                .map(p -> new PessoaDTO(p.getNome(), p.getFuncionario()))
+                .map(p -> new PessoaDTO(p.getId(), p.getNome(), p.getFuncionario()))
                 .collect(Collectors.toList());
     }
 }

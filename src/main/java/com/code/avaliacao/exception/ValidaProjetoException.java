@@ -1,15 +1,11 @@
 package com.code.avaliacao.exception;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 public class ValidaProjetoException extends BaseAvaliacaoException {
-
     private static final long serialVersionUID = 1L;
-
     private MessageSource messageSource;
-
     private String messageKey;
     private Object[] params;
 

@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PessoaDTO {
+    private Long id;
     private String nome;
     private Boolean funcionario;
 }

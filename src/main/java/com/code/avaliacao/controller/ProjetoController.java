@@ -46,7 +46,7 @@ public class ProjetoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Projeto> atualizarProjeto(@PathVariable Long id, @RequestBody Projeto projeto) {
+    public ResponseEntity<Projeto> atualizarProjeto(@PathVariable Long id, @RequestBody ProjetoDTO projeto) {
         return ResponseEntity.ok(projetoService.atualizarProjeto(id, projeto));
     }
 

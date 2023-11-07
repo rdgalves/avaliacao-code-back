@@ -6,7 +6,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+
+import java.util.Locale;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.code.avaliacao.mapper", "com.code.avaliacao.service", "com.code.avaliacao.controller", "com.code.avaliacao.repository", "com.code.avaliacao.advice"})
@@ -23,4 +26,12 @@ public class AvaliacaoApplication {
 		messageSource.setDefaultEncoding("UTF-8");
 		return messageSource;
 	}
+
+	@Bean
+	public LocaleResolver localeResolver() {
+		SessionLocaleResolver slr = new SessionLocaleResolver();
+		slr.setDefaultLocale(Locale.forLanguageTag("pt-BR"));
+		return slr;
+	}
+
 }

@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DeletarProjetoException.class)
-    public ResponseEntity<ApiErrorDTO> handleDeletarProjetoException(HttpServletRequest request, ValidaProjetoException ex) {
+    public ResponseEntity<ApiErrorDTO> handleDeletarProjetoException(HttpServletRequest request, DeletarProjetoException ex) {
         ApiErrorDTO response = new ApiErrorDTO(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),

@@ -3,13 +3,12 @@ package com.code.avaliacao.mapper;
 import com.code.avaliacao.dto.ProjetoDTO;
 import com.code.avaliacao.model.Projeto;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.Mapping;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ProjetoMapper {
-    ProjetoMapper MAPPER = Mappers.getMapper(ProjetoMapper.class);
 
     ProjetoDTO toDTO(Projeto projeto);
-
+    @Mapping(target = "gerente.id", source = "idGerente")
     Projeto toEntity(ProjetoDTO projetoDTO);
 }

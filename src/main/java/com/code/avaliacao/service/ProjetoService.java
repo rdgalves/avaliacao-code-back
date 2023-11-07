@@ -1,9 +1,12 @@
 package com.code.avaliacao.service;
 
+import com.code.avaliacao.dto.PessoaDTO;
 import com.code.avaliacao.dto.ProjetoDTO;
+import com.code.avaliacao.enums.RiscoProjetoEnum;
 import com.code.avaliacao.exception.DeletarProjetoException;
 import com.code.avaliacao.exception.ValidaProjetoException;
 import com.code.avaliacao.mapper.ProjetoMapper;
+import com.code.avaliacao.model.Pessoa;
 import com.code.avaliacao.model.Projeto;
 import com.code.avaliacao.repository.ProjetoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjetoService {
@@ -32,6 +37,7 @@ public class ProjetoService {
     public Projeto criarProjeto(ProjetoDTO projetoDTO) {
         this.validarProjeto(projetoDTO);
         Projeto projeto = projetoMapper.toEntity(projetoDTO);
+        projeto.setRisco(RiscoProjetoEnum.BAIXO_RISCO);
         return projetoRepository.save(projeto);
     }
 
@@ -43,34 +49,42 @@ public class ProjetoService {
         return projetoRepository.findById(id);
     }
 
-    public Projeto atualizarProjeto(Long id, Projeto projetoAtualizado) {
+    public Projeto atualizarProjeto(Long id, ProjetoDTO projetoDTO) {
         return projetoRepository.findById(id)
                 .map(projeto -> {
-                    projeto.setNome(projetoAtualizado.getNome());
-                    projeto.setDataInicio(projetoAtualizado.getDataInicio());
-                    projeto.setGerente(projetoAtualizado.getGerente());
-                    projeto.setDataPrevisaoFim(projetoAtualizado.getDataPrevisaoFim());
-                    projeto.setDataFim(projetoAtualizado.getDataFim());
-                    projeto.setOrcamento(projetoAtualizado.getOrcamento());
-                    projeto.setDescricao(projetoAtualizado.getDescricao());
-                    projeto.setStatus(projetoAtualizado.getStatus());
+                    projeto.setNome(projetoDTO.getNome());
+                    projeto.setDataInicio(projetoDTO.getDataInicio());
+                    projeto.setGerente(new Pessoa());
+                    projeto.getGerente().setId(projetoDTO.getIdGerente());
+                    projeto.setDataPrevisaoFim(projetoDTO.getDataPrevisaoFim());
+                    projeto.setDataFim(projetoDTO.getDataFim());
+                    projeto.setOrcamento(projetoDTO.getOrcamento());
+                    projeto.setDescricao(projetoDTO.getDescricao());
+                    projeto.setStatus(projetoDTO.getStatus());
+                    Set<Pessoa> membros = projetoDTO.getMembros()
+                            .stream()
+                            .map(this::convertToEntity) // 'this::convertToEntity' deve ser um método que você define
+                            .collect(Collectors.toSet());
+                    projeto.setMembros(membros);
                     return projetoRepository.save(projeto);
                 })
                 .orElseGet(() -> {
-                    projetoAtualizado.setId(id);
-                    return projetoRepository.save(projetoAtualizado);
+                    projetoDTO.setId(id);
+                    return projetoRepository.save(projetoMapper.toEntity(projetoDTO));
                 });
     }
-
+    private Pessoa convertToEntity(PessoaDTO pessoaDTO) {
+        return Pessoa.builder().id(pessoaDTO.getId()).build();
+    }
     public void deletarProjeto(Long id) {
         Projeto projeto = projetoRepository.findById(id)
-                .orElseThrow(() -> new DeletarProjetoException("project.notfound.error", id));
+                .orElseThrow(() -> new DeletarProjetoException(messageSource, "projeto.notfound.error", id));
 
         switch (projeto.getStatus()) {
             case INICIADO:
             case EM_ANDAMENTO:
             case ENCERRADO:
-                throw new DeletarProjetoException("project.status.error", projeto.getStatus());
+                throw new DeletarProjetoException(messageSource, "delete.projeto.error", projeto.getStatus());
             default:
                 projetoRepository.deleteById(id);
         }

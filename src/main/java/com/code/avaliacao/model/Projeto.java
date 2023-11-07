@@ -3,13 +3,17 @@ package com.code.avaliacao.model;
 import com.code.avaliacao.enums.RiscoProjetoEnum;
 import com.code.avaliacao.enums.StatusProjetoEnum;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "projeto")
 public class Projeto {
@@ -42,7 +46,7 @@ public class Projeto {
     @Enumerated(EnumType.STRING)
     private RiscoProjetoEnum risco;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idgerente", nullable = false)
     private Pessoa gerente;
 

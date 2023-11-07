@@ -19,8 +19,14 @@ public class PessoaController {
     @Autowired
     private PessoaService pessoaService;
 
-    @GetMapping
+    @GetMapping("/funcionarios")
+    public ResponseEntity<List<PessoaDTO>> listarFuncionarios() {
+        return ResponseEntity.ok(pessoaService.listarFuncionarios());
+    }
+
+    @GetMapping()
     public ResponseEntity<List<PessoaDTO>> listarPessoas() {
         return ResponseEntity.ok(pessoaService.listarPessoas());
     }
+
 }
