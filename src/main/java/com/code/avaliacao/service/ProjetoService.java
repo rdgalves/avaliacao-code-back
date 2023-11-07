@@ -7,6 +7,7 @@ import com.code.avaliacao.mapper.ProjetoMapper;
 import com.code.avaliacao.model.Projeto;
 import com.code.avaliacao.repository.ProjetoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -16,13 +17,16 @@ import java.util.Optional;
 @Service
 public class ProjetoService {
 
+    private final MessageSource messageSource;
+
     private final ProjetoRepository projetoRepository;
     private final ProjetoMapper projetoMapper;
 
     @Autowired
-    public ProjetoService(ProjetoRepository projetoRepository, ProjetoMapper projetoMapper) {
+    public ProjetoService(ProjetoRepository projetoRepository, ProjetoMapper projetoMapper, MessageSource messageSource) {
         this.projetoRepository = projetoRepository;
         this.projetoMapper = projetoMapper;
+        this.messageSource = messageSource;
     }
 
     public Projeto criarProjeto(ProjetoDTO projetoDTO) {
@@ -74,22 +78,22 @@ public class ProjetoService {
 
     private void validarProjeto(ProjetoDTO projeto) {
         if (!StringUtils.hasText(projeto.getNome())) {
-            throw new ValidaProjetoException("projeto.nome.obrigatorio.error");
+            throw new ValidaProjetoException(messageSource, "projeto.nome.obrigatorio.error");
         }
         if (projeto.getIdGerente() == null) {
-            throw new ValidaProjetoException("projeto.gerente.obrigatorio.error");
+            throw new ValidaProjetoException(messageSource, "projeto.gerente.obrigatorio.error");
         }
 
         if (projeto.getDataInicio() == null) {
-            throw new ValidaProjetoException("projeto.data_inicio.obrigatorio.error");
+            throw new ValidaProjetoException(messageSource, "projeto.data_inicio.obrigatorio.error");
         }
 
         if (projeto.getDataPrevisaoFim() != null && projeto.getDataInicio().after(projeto.getDataPrevisaoFim())) {
-            throw new ValidaProjetoException("projeto.data_previsao_termino.error");
+            throw new ValidaProjetoException(messageSource, "projeto.data_previsao_termino.error");
         }
 
         if (projeto.getDataFim() != null && projeto.getDataInicio().after(projeto.getDataFim())) {
-            throw new ValidaProjetoException("projeto.data_termino.error");
+            throw new ValidaProjetoException(messageSource, "projeto.data_termino.error");
         }
     }
 }

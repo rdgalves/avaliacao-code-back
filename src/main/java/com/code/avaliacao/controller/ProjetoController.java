@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/projetos")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ProjetoController {
 
     private final ProjetoService projetoService;

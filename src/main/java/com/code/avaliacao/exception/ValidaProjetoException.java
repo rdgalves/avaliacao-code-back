@@ -1,23 +1,32 @@
 package com.code.avaliacao.exception;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 public class ValidaProjetoException extends BaseAvaliacaoException {
 
     private static final long serialVersionUID = 1L;
 
+    private MessageSource messageSource;
+
     private String messageKey;
     private Object[] params;
 
-    public ValidaProjetoException(String messageKey, Object... params) {
+    public ValidaProjetoException(MessageSource messageSource, String messageKey, Object... params) {
         super();
+        this.messageSource = messageSource;
         this.messageKey = messageKey;
         this.params = params;
     }
 
     @Override
     public String getMessage() {
-        return messageSource.getMessage(messageKey, params, LocaleContextHolder.getLocale());
+        if (messageSource != null) {
+            return messageSource.getMessage(messageKey, params, LocaleContextHolder.getLocale());
+        } else {
+            return "Falha ao recuperar mensagem de erro.";
+        }
     }
 }
 

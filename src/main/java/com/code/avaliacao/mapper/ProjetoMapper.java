@@ -5,7 +5,7 @@ import com.code.avaliacao.model.Projeto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface ProjetoMapper {
     ProjetoMapper MAPPER = Mappers.getMapper(ProjetoMapper.class);
 

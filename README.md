@@ -79,7 +79,7 @@ Antes de iniciar, certifique-se de que você possui instalado no seu sistema:
 Para colocar tudo para funcionar rapidamente, clone este repositório e navegue até o diretório que contém o arquivo `docker-compose.yml`. Depois execute:
 
 ```bash
-docker-compose up --build
+docker-compose up --build -d
 
 
 
